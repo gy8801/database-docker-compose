@@ -10,8 +10,8 @@
 │   │   └ .env # docker环境变量配置文件
 │   ├── data # 数据库数据目录
 │   └── sql # sql文件存放目录
-└── redis
-    └── redis.conf # redis配置文件
+│── redis
+│   └── redis.conf # redis配置文件
 ```
 
 ## docker-compose 部署
