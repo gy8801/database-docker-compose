@@ -7,7 +7,7 @@ networks:
 
 services:
   # mysql服务
-  db:
+  mysql:
     image: mysql:8.0.35
     # 文件读取环境变量
     env_file:
@@ -18,7 +18,7 @@ services:
     # 挂载数据卷
     volumes:
       - ./mysql/data:/var/lib/mysql # 数据
-      - ./mysql/my.cnf:/etc/mysql/my.cnf # 配置文件
+      - ./mysql/cnf:/etc/mysql/conf.d # 配置文件
       - ./mysql/sql:/sql # sql文件目录
     ports:
       - "3306:3306"
@@ -33,6 +33,26 @@ services:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf # 配置文件
     ports:
       - "6379:6379"
+    networks:
+      - db_network
+    restart: unless-stopped # 重启策略，除手动停止外自动重启
+
+  # mariadb服务
+  mariadb:
+    image: mariadb:10.4
+    # 文件读取环境变量
+    env_file:
+      - ./mariadb/.env
+    # 直接设置环境变量
+    environment:
+      - TZ=Asia/Shanghai
+    # 挂载数据卷
+    volumes:
+      - ./mariadb/data:/var/lib/mysql # 数据
+      - ./mariadb/cnf:/etc/mysql/conf.d # 配置文件
+      - ./mariadb/sql:/sql # sql文件目录
+    ports:
+      - "3406:3406"
     networks:
       - db_network
     restart: unless-stopped # 重启策略，除手动停止外自动重启
